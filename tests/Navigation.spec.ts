@@ -121,3 +121,52 @@ test ('Check all the qualifications links', async({page})=>{
         await page.getByRole('navigation', { name: 'Topbar menu' }).getByText('Qualifications').click()
     }
 })
+
+test ('Check all the jobs links', async({page})=>{
+    test.setTimeout(60000);
+    const expectedPages = [
+        {
+            menu: 'Job Titles',
+            url:'/web/index.php/admin/viewJobTitleList'
+            
+        },
+        {
+            menu:'Pay Grades',
+            url:'/web/index.php/admin/viewPayGrades'
+        },
+        {
+            menu:'Employment Status',
+            url:'/web/index.php/admin/employmentStatus'
+        },
+                {
+            menu:'Job Categories',
+            url:'/web/index.php/admin/jobCategory'
+        },
+                {
+            menu:'Work Shifts',
+            url:'/web/index.php/admin/workShift'
+        }
+    ]
+    //test.setTimeout(60000);
+    await page.goto('https://opensource-demo.orangehrmlive.com')
+    await page.getByRole('textbox', { name: 'Username' }).fill('Admin')
+    await page.getByRole('textbox', { name: 'Password' }).fill('admin123')
+    await page.getByRole('button', { name: 'Login' }).click()
+
+    await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible()
+
+    await page.getByRole('link', { name: 'Admin' }).click()
+
+    //navegar y buscar opción por texto
+    await page.getByRole('navigation', { name: 'Topbar menu' }).getByText('Job').click()
+
+    const jobsOptions = page.getByRole('menu').locator('li')
+
+    for(let expectedPage of expectedPages){
+        const menuOption = jobsOptions.filter({hasText: expectedPage.menu})
+        await menuOption.click()
+        await expect(page).toHaveURL(new RegExp (expectedPage.url))
+
+        await page.getByRole('navigation', { name: 'Topbar menu' }).getByText('Job').click()
+    }
+})
