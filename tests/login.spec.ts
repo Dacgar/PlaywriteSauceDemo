@@ -4,8 +4,16 @@ import { LoginPage } from '../PageObjects/LoginPage'
 test('login to hrm', async ({ page }) => {
 
     const loginPage = new LoginPage(page)
-    await loginPage.doLogin('Admin', 'admin123')
+    await loginPage.LoginAsAdmin()
 
+    await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible()
+
+})
+
+test ('login as employee', async ({ page }) => {
+
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsEmployee()
     await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible()
 
 })

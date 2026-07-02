@@ -4,7 +4,7 @@ import { LoginPage } from '../PageObjects/LoginPage'
 test('Check left menu options', async({page}) => {
 
     const loginPage = new LoginPage(page)
-    await loginPage.doLogin('Admin', 'admin123')
+    await loginPage.LoginAsAdmin()
 
     await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible()
 
@@ -166,4 +166,47 @@ test ('Check all the jobs links', async({page})=>{
 
         await page.getByRole('navigation', { name: 'Topbar menu' }).getByText('Job').click()
     }
+})
+
+test('Checking example menu example', async({page}) => {
+
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsEmployee()
+
+    await expect(page.getByRole('link', { name: 'Admin' })).toBeVisible()
+
+    const leftMenuItems = page.getByLabel('Sidepanel').getByRole('listitem')
+    const currentMenuItemsCount = await leftMenuItems.count()
+
+    console.log('Current menu items count', currentMenuItemsCount)
+
+    const currentMenuItems: string[] = []
+
+    for (let i=0; i<currentMenuItemsCount; i++){
+        const menuText = await leftMenuItems.nth(i).innerText()
+        currentMenuItems.push(menuText)
+        }
+
+    console.log(currentMenuItems)
+
+    // Validar primer elemento
+    expect(currentMenuItems[0]).toBe('Admin')
+    
+    const expectedMenuItems =[
+        'Admin',
+        'PIM',
+        'Leave',
+        'Time',
+        'Recruitment',
+        'My Info',
+        'Performance',
+        'Dashboard',
+        'Directory',
+        'Maintenance',
+        'Claim',
+        'Buzz',
+    ];
+
+    expect(currentMenuItems).toEqual(expectedMenuItems)
+
 })
