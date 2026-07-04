@@ -1,5 +1,7 @@
 import {test, expect} from '@playwright/test'
 import { LoginPage } from '../PageObjects/LoginPage'
+import { TopBarMenu } from '../Components/Top-bar-menu/TopBarMenu'
+import { SideMenuOption, SidePanel } from '../Components/SidePanel'
 
 test('Check left menu options', async({page}) => {
 
@@ -209,4 +211,19 @@ test('Checking example menu example', async({page}) => {
 
     expect(currentMenuItems).toEqual(expectedMenuItems)
 
+})
+
+test('testing topbar menu', async({page}) => {
+
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsAdmin()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+
+    const topBarMenu = new TopBarMenu(page)
+    await topBarMenu.job.clickOnJobTitles()
+    await topBarMenu.job.clickOnpayGrades()
+
+    await topBarMenu.userManagment.clickOnUsers()
 })
