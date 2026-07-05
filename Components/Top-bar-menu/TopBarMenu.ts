@@ -1,17 +1,23 @@
 import { Page } from "@playwright/test";
 import { UserManagementMenu } from "./UserManagementMenu";
 import { JobMenu } from "./JobMenu";
+import { OrganizationMenu } from "./OrganizationMenu";
+import { QualificationsMenu } from "./Qualifications";
 
 export class TopBarMenu {
 
     private readonly page:Page
     readonly userManagment: UserManagementMenu
     readonly job: JobMenu
+    readonly organization: OrganizationMenu
+    readonly qualifications: QualificationsMenu
 
     constructor(page: Page) {
         this.page = page
         this.userManagment = new UserManagementMenu(page)
         this.job = new JobMenu(page)
+        this.organization = new OrganizationMenu(page)
+        this.qualifications = new QualificationsMenu(page)
     }
 
 }

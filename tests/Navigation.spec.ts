@@ -222,8 +222,22 @@ test('testing topbar menu', async({page}) => {
     await sidePanel.clickOnOption(SideMenuOption.ADMIN)
 
     const topBarMenu = new TopBarMenu(page)
+    await topBarMenu.userManagment.clickOnUsers()
+
     await topBarMenu.job.clickOnJobTitles()
     await topBarMenu.job.clickOnpayGrades()
+    await topBarMenu.job.clickOnEmploymentStatus()
+    await topBarMenu.job.clickOnJobsCategories()
+    await topBarMenu.job.clickOnWorkShifts()
 
-    await topBarMenu.userManagment.clickOnUsers()
+    await topBarMenu.organization.clickOnGeneralInformation()
+    await topBarMenu.organization.clickOnLocations()
+    await topBarMenu.organization.clickOnStructure()
+
+    await topBarMenu.qualifications.clickOnSkills()
+    await topBarMenu.qualifications.clickOnEducation()
+    await topBarMenu.qualifications.clickOnLicenses()
+    await topBarMenu.qualifications.clickOnLanguages()
+    await topBarMenu.qualifications.clickOnMemberships()
+
 })
