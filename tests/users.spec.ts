@@ -109,3 +109,31 @@ test ('Check status options', async ({ page }) => {
 
     expect(currentStatusOptions,'The options displayed in the User Role Dropdown do not match the expected options.').toEqual(expectedRoleOptions)
 })
+//Sesión 12
+test('Filter by user Admin', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsAdmin()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    //captura de las filas de la tabla que contienen el role Admin antes de aplicar el filtro
+    const allBodyRows = page.getByRole('table').getByRole('rowgroup').nth(1).getByRole('row')
+    //filas que contienen el role Admin
+    const currentAdminRows = allBodyRows.filter({
+        has: page.getByRole('cell').nth(2).getByText('Admin')
+    })
+    //se realiza el conteo de las filas que contienen el role Admin 
+    const expectedAdminCount = await currentAdminRows.count()
+    console.log('Admin users before filtering: ', expectedAdminCount)
+
+    //Aplicar filtro
+    await page.locator("//label[contains(.,'User Role')]/parent::div/following-sibling::div").click()
+    await page.getByRole('listbox').getByRole('option',{ name: 'Admin' }).click()
+    await page.getByRole('button',{name:'Search'}).click()
+
+    //la tabla filtrada deberia tener exactamente la misma cantidad que encontramos antes
+    await expect(allBodyRows).toHaveCount(expectedAdminCount)
+    for(let i=0; i<expectedAdminCount; i++){
+        await expect(allBodyRows.nth(i).getByRole('cell').nth(2)).toContainText('Admin')
+    } 
+})
