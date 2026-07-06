@@ -137,3 +137,31 @@ test('Filter by user Admin', async ({ page }) => {
         await expect(allBodyRows.nth(i).getByRole('cell').nth(2)).toContainText('Admin')
     } 
 })
+//Reto Sesión 12
+test('Filter by user ESS', async ({ page }) => {
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsAdmin()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+    //captura de las filas de la tabla que contienen el role Admin antes de aplicar el filtro
+    const allBodyRows = page.getByRole('table').getByRole('rowgroup').nth(1).getByRole('row')
+    //filas que contienen el role Admin
+    const currentAdminRows = allBodyRows.filter({
+        has: page.getByRole('cell').nth(2).getByText('ESS')
+    })
+    //se realiza el conteo de las filas que contienen el role Admin 
+    const expectedAdminCount = await currentAdminRows.count()
+    console.log('ESS users before filtering: ', expectedAdminCount)
+
+    //Aplicar filtro
+    await page.locator("//label[contains(.,'User Role')]/parent::div/following-sibling::div").click()
+    await page.getByRole('listbox').getByRole('option',{ name: 'ESS' }).click()
+    await page.getByRole('button',{name:'Search'}).click()
+
+    //la tabla filtrada deberia tener exactamente la misma cantidad que encontramos antes
+    await expect(allBodyRows).toHaveCount(expectedAdminCount)
+    for(let i=0; i<expectedAdminCount; i++){
+        await expect(allBodyRows.nth(i).getByRole('cell').nth(2)).toContainText('ESS')
+    } 
+})
