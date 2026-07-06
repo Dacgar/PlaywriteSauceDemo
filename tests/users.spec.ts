@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test"
 import { LoginPage } from "../PageObjects/LoginPage"
+import { SideMenuOption, SidePanel } from "../Components/SidePanel"
 
 test('get all the usernames registered', async ({ page }) => {
 
@@ -74,4 +75,37 @@ test('Select specific user for editions', async ({ page }) => {
     //expect(page.locator("//label[contains(.,'Username')]/parent::div/following-sibling::div/input"))
     //.toHaveValue(currentUserName)
 
+})
+
+test ('Check user role options', async ({ page }) => {
+    const expectedRoleOptions = ['-- Select --', 'Admin', 'ESS','Pepe']
+
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsAdmin()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+
+    await page.locator("//label[contains(.,'User Role')]/parent::div/following-sibling::div").click()
+    const currentUserRoleOptions = await page.getByRole('listbox').getByRole('option').allInnerTexts()
+
+    console.log(currentUserRoleOptions)
+
+    expect(currentUserRoleOptions,'The options displayed in the User Role Dropdown do not match the expected options.').toEqual(expectedRoleOptions)
+})
+test ('Check status options', async ({ page }) => {
+    const expectedRoleOptions = ['-- Select --', 'Enabled', 'Disabled','Pepe']
+
+    const loginPage = new LoginPage(page)
+    await loginPage.LoginAsAdmin()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+
+    await page.locator("//label[contains(.,'Status')]/parent::div/following-sibling::div").click()
+    const currentStatusOptions = await page.getByRole('listbox').getByRole('option').allInnerTexts()
+
+    console.log(currentStatusOptions)
+
+    expect(currentStatusOptions,'The options displayed in the User Role Dropdown do not match the expected options.').toEqual(expectedRoleOptions)
 })
