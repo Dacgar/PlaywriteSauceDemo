@@ -230,4 +230,59 @@ test('Add new user', async ({ page }) => {
 
     
 })
+test('Add new user failed', async ({ page }) => {
+    const randomUserName = 'goku' + crypto.randomUUID()
+    const password = 'R4ndom45...*'
+    const passwordIncorrect = 'R4ndom45...*1'
+    const employeeToSearch = 'Qwerty LName'
+
+    const navigate = new Navigate(page)
+    await navigate.toDashboard()
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+
+    const topBarMenu = new TopBarMenu(page)
+    await topBarMenu.userManagment.clickOnUsers()
+
+    await page.getByRole('button', { name: 'Add' }).click()
+    //obtiene los div que tengan la clase oxd-grid-item--gutters, 
+    // filtra por el que tenga el texto User Role, 
+    // obtiene el div que tenga la clase oxd-select-text-input y hace click
+    await page.locator('div.oxd-grid-item--gutters')
+        .filter({ has: page.getByText('User Role') })
+        .locator('div.oxd-select-text-input')
+        .click()
+
+    await page.getByText('ESS', { exact: true }).click()
+
+    await page.getByRole('textbox', { name: 'Type for hints...' }).fill(employeeToSearch)
+    await page.getByText('Qwerty Qwerty LName', { exact: true }).click()
+
+    await page.locator('div.oxd-grid-item--gutters')
+        .filter({ has: page.getByText('Status') })
+        .locator('div.oxd-select-text-input')
+        .click()
+
+    await page.getByText('Enabled', { exact: true }).click()
+
+    await page.locator('div.oxd-grid-item--gutters')
+        .filter({ has: page.getByText('Username') })
+        .getByRole('textbox')
+        .fill(randomUserName)
+
+    await page.locator('div.oxd-grid-item--gutters')
+        .filter({ has: page.getByText('Password', { exact: true }) })
+        .getByRole('textbox')
+        .fill(password)
+
+    await page.locator('div.oxd-grid-item--gutters')
+        .filter({ has: page.getByText('Confirm Password', { exact: true }) })
+        .getByRole('textbox')
+        .fill(passwordIncorrect)
+
+    //await page.getByRole('button', {name:'Save'}).click()
+
+    await expect(page.locator('span.oxd-input-field-error-message')).toHaveText('Passwords do not match')
+})
 
