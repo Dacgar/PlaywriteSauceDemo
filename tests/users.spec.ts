@@ -5,6 +5,7 @@ import { TopBarMenu } from "../Components/Top-bar-menu/TopBarMenu"
 import { Navigate } from "../PageObjects/Navigate"
 import { AddNewUserPage } from "../PageObjects/AddNewUserPage"
 import { UserModel } from "../models/UserModel"
+import { UserFactory } from "../factory/UserFactory"
 
 test('get all the usernames registered', async ({ page }) => {
 
@@ -204,9 +205,6 @@ test('capture all amounts', async ({ page }) => {
 })
 
 test('Add new user', async ({ page }) => {
-    const randomUserName = 'goku' + crypto.randomUUID()
-    const password = 'R4ndom45...*'
-    const employeeToSearch = 'Qwerty LName'
 
     const navigate = new Navigate(page)
     await navigate.toDashboard()
@@ -218,20 +216,15 @@ test('Add new user', async ({ page }) => {
     const topBarMenu = new TopBarMenu(page)
     await topBarMenu.userManagment.clickOnUsers()
 
-    const userToAdd:UserModel={
-        userName:randomUserName,
-        employeeName:employeeToSearch,
-        password:password,
-        ConfirmPassword:password,
-        role:'ESS',
-        status:'Enabled'
-    }
+    const adminUser = UserFactory.createAdmin({
+        employeeName: 'manda akhil user'
+    })
 
     const addNewUserPage = new AddNewUserPage(page)
-    await addNewUserPage.addNewUser(userToAdd)
+    await addNewUserPage.addNewUser(adminUser)
     await addNewUserPage.checkUserWasAddedMessage()
 
-    
+
 })
 test('Add new user failed', async ({ page }) => {
     const randomUserName = 'goku' + crypto.randomUUID()

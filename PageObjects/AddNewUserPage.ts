@@ -23,13 +23,14 @@ export class AddNewUserPage {
             .locator('div.oxd-select-text-input')
             .click()
 
-        await this.page.getByText(UserRole, { exact: true }).click()
+        //await this.page.getByText(UserRole, { exact: true }).click()
+        await this.page.getByRole('option', { name: UserRole }).click()
     }
     async selectEmployeeName(EmployeeName: string) {
         await this.page.getByRole('textbox', { name: 'Type for hints...' })
             .fill(EmployeeName)
 
-        await this.page.getByText('Qwerty Qwerty LName', { exact: true }).click()
+        await this.page.getByText(EmployeeName, { exact: true }).click()
     }
     async selectStatus(Status: string) {
         await this.page.locator('div.oxd-grid-item--gutters')
@@ -63,7 +64,7 @@ export class AddNewUserPage {
     async checkUserWasAddedMessage() {
         await expect(this.page.locator('p.oxd-text--toast-message')).toHaveText('Successfully Saved')
     }
-    async addNewUser(user:UserModel) {
+    async addNewUser(user: UserModel) {
         await this.clickOnAdd()
         await this.selectUserRole(user.role)
         await this.selectEmployeeName(user.employeeName)
