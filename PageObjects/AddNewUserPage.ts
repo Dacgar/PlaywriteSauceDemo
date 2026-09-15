@@ -1,4 +1,5 @@
 import { Page, expect } from "@playwright/test"
+import { UserModel } from "../models/UserModel"
 
 export class AddNewUserPage {
 
@@ -44,13 +45,13 @@ export class AddNewUserPage {
             .getByRole('textbox')
             .fill(UserName)
     }
-        async enterPassword(password: string) {
+    async enterPassword(password: string) {
         await this.page.locator('div.oxd-grid-item--gutters')
             .filter({ has: this.page.getByText('Password', { exact: true }) })
             .getByRole('textbox')
             .fill(password)
     }
-        async enterConfirmPassword(password: string) {
+    async enterConfirmPassword(password: string) {
         await this.page.locator('div.oxd-grid-item--gutters')
             .filter({ has: this.page.getByText('Confirm Password', { exact: true }) })
             .getByRole('textbox')
@@ -61,5 +62,15 @@ export class AddNewUserPage {
     }
     async checkUserWasAddedMessage() {
         await expect(this.page.locator('p.oxd-text--toast-message')).toHaveText('Successfully Saved')
+    }
+    async addNewUser(user:UserModel) {
+        await this.clickOnAdd()
+        await this.selectUserRole(user.role)
+        await this.selectEmployeeName(user.employeeName)
+        await this.selectStatus(user.status)
+        await this.enterUserName(user.userName)
+        await this.enterPassword(user.password)
+        await this.enterConfirmPassword(user.ConfirmPassword)
+        await this.clickOnSave()
     }
 }
