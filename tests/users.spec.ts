@@ -204,7 +204,7 @@ test('capture all amounts', async ({ page }) => {
     console.log("total is", total)
 })
 
-test('Add new user', async ({ page }) => {
+test('Add new user admin', async ({ page }) => {
 
     const navigate = new Navigate(page)
     await navigate.toDashboard()
@@ -216,9 +216,31 @@ test('Add new user', async ({ page }) => {
     const topBarMenu = new TopBarMenu(page)
     await topBarMenu.userManagment.clickOnUsers()
 
-    const adminUser = UserFactory.createAdmin({
-        employeeName: 'manda akhil user'
+    //captura de las filas de la tabla que contienen el role Admin antes de aplicar el filtro
+    const allBodyRows = page.getByRole('table').getByRole('rowgroup').nth(1).getByRole('row')
+    //filas que contienen el role Admin
+    const currentAdminRows = allBodyRows.filter({
+        has: page.getByRole('cell').nth(2).getByText('Admin')
     })
+
+    const firstAdminToSearch = currentAdminRows.nth(0)
+    await expect(firstAdminToSearch, "No Admin Users found in the table").toHaveCount(1)
+
+    await firstAdminToSearch
+        //devuelve los elementos del row
+        .locator('button')
+        //Devuelve el que tenga dentro del atributo la clase
+        .filter({ has: page.locator('i.bi-pencil-fill') }).click()
+
+        const fullUserToSearch = await page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
+        console.log(`UserToSearch: ${fullUserToSearch}`)
+
+
+    const adminUser = UserFactory.createAdmin({
+        employeeName: fullUserToSearch
+    })
+
+    await page.goBack()
 
     const addNewUserPage = new AddNewUserPage(page)
     await addNewUserPage.addNewUser(adminUser)
