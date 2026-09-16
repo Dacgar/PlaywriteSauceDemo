@@ -7,7 +7,7 @@ setup('authentication as admin', async({page}) => {
     const loginPage = new LoginPage(page)
     await loginPage.LoginAsAdmin()
     //nos aseguramos que el inicio de sesion es exitoso
-    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible
+    await expect(page.getByRole('link',{name:'Admin'})).toBeVisible()
     //guardar el estado
     await page.context().storageState({path: '.auth/admin.json'})
 

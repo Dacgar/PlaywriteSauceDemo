@@ -12,7 +12,7 @@ jobs:
     env:
       ADMIN_USERNAME: ${{ vars.ADMIN_USERNAME }}
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-      EMPLOYEE_USERNAME: ${{ secrets.EMPLOYEE_USERNAME }}
+      EMPLOYEE_USERNAME: ${{ vars.EMPLOYEE_USERNAME }}
       EMPLOYEE_PASSWORD: ${{ secrets.EMPLOYEE_PASSWORD }}
     steps:
     - uses: actions/checkout@v4
