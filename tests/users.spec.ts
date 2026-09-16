@@ -304,3 +304,47 @@ test('Add new user failed', async ({ page }) => {
     await expect(page.locator('span.oxd-input-field-error-message')).toHaveText('Passwords do not match')
 })
 
+test('Add new user ESS', async ({ page }) => {
+
+    const navigate = new Navigate(page)
+    await navigate.toDashboard()
+    //await page.goto('/web/index.php/dashboard/index')
+
+    const sidePanel = new SidePanel(page)
+    await sidePanel.clickOnOption(SideMenuOption.ADMIN)
+
+    const topBarMenu = new TopBarMenu(page)
+    await topBarMenu.userManagment.clickOnUsers()
+
+    //captura de las filas de la tabla que contienen el role ESS antes de aplicar el filtro
+    const allBodyRows = page.getByRole('table').getByRole('rowgroup').nth(1).getByRole('row')
+    //filas que contienen el role ESS
+    const currentESSRows = allBodyRows.filter({
+        has: page.getByRole('cell').nth(2).getByText('ESS')
+    })
+
+    const firstESSToSearch = currentESSRows.nth(1)
+    await expect(firstESSToSearch, "No ESS Users found in the table").toHaveCount(1)
+
+    await firstESSToSearch
+        //devuelve los elementos del row
+        .locator('button')
+        //Devuelve el que tenga dentro del atributo la clase
+        .filter({ has: page.locator('i.bi-pencil-fill') }).click()
+
+        const fullUserToSearch = await page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
+        console.log(`UserToSearch: ${fullUserToSearch}`)
+
+
+    const adminUser = UserFactory.createAdmin({
+        employeeName: fullUserToSearch
+    })
+
+    await page.goBack()
+
+    const addNewUserPage = new AddNewUserPage(page)
+    await addNewUserPage.addNewUser(adminUser)
+    await addNewUserPage.checkUserWasAddedMessage()
+
+
+})
