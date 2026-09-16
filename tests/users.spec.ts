@@ -6,6 +6,7 @@ import { Navigate } from "../PageObjects/Navigate"
 import { AddNewUserPage } from "../PageObjects/AddNewUserPage"
 import { UserModel } from "../models/UserModel"
 import { UserFactory } from "../factory/UserFactory"
+import { UsersTable } from "../Components/UsersTable"
 
 test('get all the usernames registered', async ({ page }) => {
 
@@ -216,24 +217,11 @@ test('Add new user admin', async ({ page }) => {
     const topBarMenu = new TopBarMenu(page)
     await topBarMenu.userManagment.clickOnUsers()
 
-    //captura de las filas de la tabla que contienen el role Admin antes de aplicar el filtro
-    const allBodyRows = page.getByRole('table').getByRole('rowgroup').nth(1).getByRole('row')
-    //filas que contienen el role Admin
-    const currentAdminRows = allBodyRows.filter({
-        has: page.getByRole('cell').nth(2).getByText('Admin')
-    })
+    const usersTable = new UsersTable(page)
+    await usersTable.editFirstAdminOnTheTable()
 
-    const firstAdminToSearch = currentAdminRows.nth(0)
-    await expect(firstAdminToSearch, "No Admin Users found in the table").toHaveCount(1)
-
-    await firstAdminToSearch
-        //devuelve los elementos del row
-        .locator('button')
-        //Devuelve el que tenga dentro del atributo la clase
-        .filter({ has: page.locator('i.bi-pencil-fill') }).click()
-
-        const fullUserToSearch = await page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
-        console.log(`UserToSearch: ${fullUserToSearch}`)
+    const addNewUserPage = new AddNewUserPage(page)
+    const fullUserToSearch = await addNewUserPage.getEmployeeName() 
 
 
     const adminUser = UserFactory.createAdmin({
@@ -242,7 +230,7 @@ test('Add new user admin', async ({ page }) => {
 
     await page.goBack()
 
-    const addNewUserPage = new AddNewUserPage(page)
+
     await addNewUserPage.addNewUser(adminUser)
     await addNewUserPage.checkUserWasAddedMessage()
 
@@ -332,8 +320,8 @@ test('Add new user ESS', async ({ page }) => {
         //Devuelve el que tenga dentro del atributo la clase
         .filter({ has: page.locator('i.bi-pencil-fill') }).click()
 
-        const fullUserToSearch = await page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
-        console.log(`UserToSearch: ${fullUserToSearch}`)
+    const fullUserToSearch = await page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
+    console.log(`UserToSearch: ${fullUserToSearch}`)
 
 
     const adminUser = UserFactory.createAdmin({

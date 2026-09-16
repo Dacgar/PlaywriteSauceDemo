@@ -74,4 +74,10 @@ export class AddNewUserPage {
         await this.enterConfirmPassword(user.ConfirmPassword)
         await this.clickOnSave()
     }
+
+    async getEmployeeName(): Promise<string> {
+        const fullUserToSearch = await this.page.getByRole('textbox', { name: 'Type for hints...' }).inputValue()
+        console.log(`UserToSearch: ${fullUserToSearch}`)
+        return fullUserToSearch
+    }
 }
