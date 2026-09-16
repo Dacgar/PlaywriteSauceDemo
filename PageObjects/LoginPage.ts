@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { Enviroment } from "../Config/Enviroment";
+import { Environment } from "../Config/Environment";
 
 export class LoginPage {
 
@@ -24,10 +24,10 @@ export class LoginPage {
     }
 
     async LoginAsAdmin() {
-        await this.doLogin(Enviroment.ADMIN_USERNAME, Enviroment.ADMIN_PASSWORD)
+        await this.doLogin(Environment.ADMIN_USERNAME, Environment.ADMIN_PASSWORD)
     }
 
     async LoginAsEmployee() {
-        await this.doLogin(Enviroment.EMPLOYEE_USERNAME, Enviroment.EMPLOYEE_PASSWORD)
+        await this.doLogin(Environment.EMPLOYEE_USERNAME, Environment.EMPLOYEE_PASSWORD)
     }
 }
