@@ -205,7 +205,7 @@ test('capture all amounts', async ({ page }) => {
     console.log("total is", total)
 })
 
-test('Add new user admin', async ({ page }) => {
+test('Add new user admin @Users', async ({ page }) => {
 
     const navigate = new Navigate(page)
     await navigate.toUsers()
@@ -214,7 +214,7 @@ test('Add new user admin', async ({ page }) => {
     await usersTable.editFirstAdminOnTheTable()
 
     const addNewUserPage = new AddNewUserPage(page)
-    const fullUserToSearch = await addNewUserPage.getEmployeeName() 
+    const fullUserToSearch = await addNewUserPage.getEmployeeName()
 
 
     const adminUser = UserFactory.createAdmin({
@@ -229,7 +229,7 @@ test('Add new user admin', async ({ page }) => {
 
 
 })
-test('Add new user failed', async ({ page }) => {
+test('Add new user failed @Users', async ({ page }) => {
     const randomUserName = 'goku' + crypto.randomUUID()
     const password = 'R4ndom45...*'
     const passwordIncorrect = 'R4ndom45...*1'
@@ -285,7 +285,7 @@ test('Add new user failed', async ({ page }) => {
     await expect(page.locator('span.oxd-input-field-error-message')).toHaveText('Passwords do not match')
 })
 
-test('Add new user ESS', async ({ page }) => {
+test('Add new user ESS @Users', async ({ page }) => {
 
     const navigate = new Navigate(page)
     await navigate.toDashboard()
@@ -329,7 +329,7 @@ test('Add new user ESS', async ({ page }) => {
 
 
 })
-test('Delete user admin', async ({ page }) => {
+test('Delete user admin @Users', async ({ page }) => {
     //arrange = precondicion
     const navigate = new Navigate(page)
     await navigate.toUsers()
@@ -338,7 +338,7 @@ test('Delete user admin', async ({ page }) => {
     await usersTable.editFirstAdminOnTheTable()
 
     const addNewUserPage = new AddNewUserPage(page)
-    const fullUserToSearch = await addNewUserPage.getEmployeeName() 
+    const fullUserToSearch = await addNewUserPage.getEmployeeName()
 
 
     const adminUser = UserFactory.createAdmin({
