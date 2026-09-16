@@ -37,6 +37,24 @@ export class UsersTable {
             //Devuelve el que tenga dentro del atributo la clase
             .filter({ has: this.page.locator('i.bi-pencil-fill') }).click()
     }
+    async clickOnDeleteActionUsername(username: string) {
+        const allBodyRows = this.getAllBodyRows()
+
+        const filteredRowsByUserName = allBodyRows.filter(
+            {
+                has: this.page.getByRole('cell').nth(1).getByText(username)
+
+            }
+        )
+        expect(filteredRowsByUserName, `No rows contains username: ${username} were found`).toHaveCount(1)
+
+        await filteredRowsByUserName.locator('button')
+            .filter({ has: this.page.locator('i.bi-trash') }).click()
+    }
+    async acceptDeleteUser() {
+        await this.page.getByRole('button', { name: /Yes, Delete/ }).click()
+    }
+
 }
 
 
